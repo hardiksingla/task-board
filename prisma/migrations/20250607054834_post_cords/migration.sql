@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Post" ADD COLUMN     "x" INTEGER,
+ADD COLUMN     "y" INTEGER;
