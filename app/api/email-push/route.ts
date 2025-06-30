@@ -224,7 +224,7 @@ export async function POST(req: NextRequest) {
               const message = contentLines[1] ? contentLines[1].trim() : '';
 
               try {
-                await axios.post('http://localhost:3000/api/post/new-post', {
+                await axios.post('https://task-board-sigma-blush.vercel.app/api/post/new-post', {
                   emailId: messageId,
                   subject: subjectHeader ? subjectHeader.value : 'N/A',
                   email: extractedEmail,
