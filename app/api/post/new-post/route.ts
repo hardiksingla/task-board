@@ -64,7 +64,7 @@ async function saveYoutubePost(id: string, type: "video" | "playlist" | "shorts"
         let videoRes;
         try {
             videoRes = await axios.get(requestBody);
-        } catch (apiErr) {
+        } catch (apiErr:any) {
             console.error("Failed to fetch from YouTube API:", apiErr.response?.data || apiErr.message);
             throw new Error("YouTube API call failed.");
         }
