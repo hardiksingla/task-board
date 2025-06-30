@@ -57,9 +57,23 @@ function extractYoutubeVideoId(url: string): { id: string , type : "video" | "pl
 async function saveYoutubePost(id: string, type: "video" | "playlist" | "shorts", email: string) {
     console.log("Saving YouTube post with ID:", id, "Type:", type, "Email:", email);
     try {
-        const requestBody = (`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${id}&key=${YOUTUBE_API_KEY}`)
-        const videoRes = await axios.get(requestBody);
+        const requestBody = `https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${id}&key=${YOUTUBE_API_KEY}`;
+        
+        console.log("Fetching video data from:", requestBody);
+        
+        let videoRes;
+        try {
+            videoRes = await axios.get(requestBody);
+        } catch (apiErr) {
+            console.error("Failed to fetch from YouTube API:", apiErr.response?.data || apiErr.message);
+            throw new Error("YouTube API call failed.");
+        }
+
         const videoData = videoRes.data.items[0]?.snippet;
+        if (!videoData) {
+            console.error("No snippet found in video data:", videoRes.data);
+            throw new Error("Video data not found.");
+        }
         console.log(videoData);
         const transcript = await fetchTranscript(id);
 
