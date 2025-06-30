@@ -140,7 +140,7 @@ export async function POST(req: NextRequest) {
             });
         }
         console.log("Extracted Video ID:", data.id);
-        saveYoutubePost(data.id, data.type, email);
+        await saveYoutubePost(data.id, data.type, email);
     }
 
     return NextResponse.json({
