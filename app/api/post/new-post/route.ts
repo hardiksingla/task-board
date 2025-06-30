@@ -77,7 +77,16 @@ async function saveYoutubePost(id: string, type: "video" | "playlist" | "shorts"
             throw new Error("Video data not found.");
         }
         console.log(videoData);
-        const transcript = await fetchTranscript(id);
+        let transcript = "";
+        try {
+            console.log("Fetching transcript for video ID:", id);
+            transcript = await fetchTranscript(id);
+            console.log("Transcript fetched successfully.");
+        }
+        catch (transcriptErr) {
+            console.error("Failed to fetch transcript:", transcriptErr);
+            transcript = "Transcript not available.";
+        }
 
         const existingPost = await prisma.post.findFirst({
             where: {
