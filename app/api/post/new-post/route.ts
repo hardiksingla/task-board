@@ -55,6 +55,7 @@ function extractYoutubeVideoId(url: string): { id: string , type : "video" | "pl
 }
 
 async function saveYoutubePost(id: string, type: "video" | "playlist" | "shorts", email: string) {
+    console.log("Saving YouTube post with ID:", id, "Type:", type, "Email:", email);
     try {
         const requestBody = (`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${id}&key=${YOUTUBE_API_KEY}`)
         const videoRes = await axios.get(requestBody);
@@ -70,11 +71,12 @@ async function saveYoutubePost(id: string, type: "video" | "playlist" | "shorts"
                 },
             },
         });
-
+        console.log("Checking for existing post:", existingPost);
         if (existingPost) {
+            console.log('A post was already created for this user in the last 10 seconds.');
             throw new Error('A post was already created for this user in the last 10 seconds.');
         }
-        
+        console.log("Creating new post for user:", email);
         const post = await prisma.post.create({
             data: {
                 title: videoData.title,
@@ -89,8 +91,7 @@ async function saveYoutubePost(id: string, type: "video" | "playlist" | "shorts"
                 }
             }
         });
-
-        
+        console.log("Post created successfully:", post);        
         
     } catch (error) {
         console.error('Error fetching video data:', error);
@@ -112,7 +113,9 @@ export async function POST(req: NextRequest) {
 
     const parsedUrl = new URL(url);
     let data : { id: string , type : "video" | "playlist" | "shorts" | "error"} = {id: "",type: "error"};
+    console.log("Parsed URL:", parsedUrl);
     if(parsedUrl.hostname == "www.youtube.com" || parsedUrl.hostname == "youtube.com" || parsedUrl.hostname == "youtu.be") {
+        console.log("Valid YouTube URL detected");
         data = extractYoutubeVideoId(url);
         if(data.type == "error") {
             return NextResponse.json({
@@ -120,6 +123,7 @@ export async function POST(req: NextRequest) {
                 message: "Invalid Youtube URL"
             });
         }
+        console.log("Extracted Video ID:", data.id);
         saveYoutubePost(data.id, data.type, email);
     }
 
