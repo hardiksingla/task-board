@@ -1,7 +1,7 @@
 import BoardCanvas from '@/components/BoardCanvas';
 import BoardComponent from '@/components/Boards';
 
-export default async function Board({ params }: { params: { boardId: string[] } }) {
+export default async function Board({ params }: any ) {
   const { boardId } = params;
   const id = boardId[0];
 

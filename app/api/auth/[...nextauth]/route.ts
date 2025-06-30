@@ -2,8 +2,8 @@ import NextAuth from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import prisma from "@/db";
-import { redirect } from "next/dist/server/api-utils";
-import { sign } from "crypto";
+// import { redirect } from "next/dist/server/api-utils";
+// import { sign } from "crypto";
 
 const authOptions = {
   providers: [    
